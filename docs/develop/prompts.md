@@ -1,20 +1,23 @@
 ## 実装
 
 <instruction>
-frontend をリファクタリングします。
-
-@/frontend/src/hooks/useVoiceChat.ts では@/frontend/src/app/api/ephemeral-key/route.ts を利用していますが、@/backend/src/presentation/endpoint/websocket.py で提供されているWebSocketエンドポイントを直接利用するように変更します。
-まずreferenceを確認して、必要な実装を洗い出してください。
+Kaggleのリーダーボードのように、リアルタイムでスコアが更新される仕組みをNext.jsとReact 18、TypeScriptを使用して実装してください。以下の要件を満たすようにしてください。
 </instruction>
 
 <requirements>
-- WebSocketエンドポイントを直接利用するように変更する
-- javascriptではなくtypescriptで実装する
-- 現在の@/frontend/src のフォルダ構成に合わせるよう、次のフォルダで整理する
-  - app
-  - components
-  - contexts
-  - hooks
-  - services
-  - types
+- Next.jsを使用する
+- ユーザーはログイン後にスコアボードページにアクセスできる
+- スコアボードページでは、参加者の名前とスコアが一覧表示される
+- スコアボードページからアップロードページに遷移できる
+- アップロードページでは、参加者がCSVファイルをアップロードできる
+- アップロードページでは、CSVファイルのフォーマットが正しいかどうかを検証する
+- アップロードされたCSVファイルには、参加者の名前とスコアが含まれている
+- CSVファイルがアップロードされると、スコアボードがリアルタイムで更新される
+- スコアボードページとは別に、管理者用のページを作成し、管理者は参加者のスコアを手動で更新できる
 </requirements>
+
+<development-rule>
+- 実装の増加量が小さくなるよう、大規模なクラスの実装はしない
+- 後方互換性への配慮は不要。不要になったコードは削除
+- 小さすぎるクラスやメソッドは実装しない
+</development-rule>
