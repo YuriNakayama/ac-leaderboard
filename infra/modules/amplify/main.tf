@@ -16,6 +16,7 @@ resource "aws_amplify_app" "main" {
                 - npm ci
             build:
               commands:
+                - echo "NEXT_PUBLIC_APP_NAME=AI相談窓口" >> .env
                 - npm run build
           artifacts:
             baseDirectory: .next
@@ -39,7 +40,7 @@ resource "aws_amplify_app" "main" {
   # カスタムルール
   custom_rule {
     source = "/<*>"
-    status = "404"
+    status = "404-200"
     target = "/index.html"
   }
 
