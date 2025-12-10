@@ -35,5 +35,5 @@ amplify_enable_auto_build = true
 
 # Amplify環境変数
 amplify_environment_variables = {
-  NODE_ENV = "development"
+  NODE_ENV = "production"
 }
