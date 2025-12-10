@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // SSRモードを明示的に指定（Amplifyでのビルドエラーを防ぐ）
+  output: "standalone",
+
   experimental: {
     // Optimize for better performance
     optimizePackageImports: ["@openai/agents"],
