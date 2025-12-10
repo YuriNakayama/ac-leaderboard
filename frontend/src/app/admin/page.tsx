@@ -1,7 +1,7 @@
 "use client";
 
+import AppLayout from "@/components/AppLayout";
 import { useScoreStore } from "@/lib/store";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -66,128 +66,111 @@ export default function AdminPage() {
   const sortedScores = [...scores].sort((a, b) => b.score - a.score);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold text-black">AC Leaderboard - 管理者ページ</h1>
-            <Link
-              href="/scoreboard"
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            >
-              スコアボードに戻る
-            </Link>
-          </div>
+    <AppLayout title="AC Leaderboard - 管理者ページ" showBackButton>
+      <div className="card">
+        <div className="card-header">
+          <h2 className="card-title">スコア管理</h2>
+          <p className="card-description">
+            スコアを手動で編集できます。編集ボタンをクリックして変更してください。
+          </p>
         </div>
-      </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-black">スコア管理</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              スコアを手動で編集できます。編集ボタンをクリックして変更してください。
-            </p>
+        {error && (
+          <div className="alert alert-error" style={{ margin: "1.5rem" }}>
+            <p className="alert-error-title">{error}</p>
           </div>
+        )}
 
-          {error && (
-            <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-800">{error}</p>
-            </div>
-          )}
-
-          {scores.length === 0 ? (
-            <div className="px-6 py-12 text-center text-gray-500">
-              まだスコアが登録されていません。
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      順位
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      参加者名
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      スコア
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      送信日時
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      操作
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {sortedScores.map((score, index) => (
-                    <tr key={score.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {index + 1}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {editingId === score.id ? (
-                          <input
-                            type="text"
-                            value={editName}
-                            onChange={(e) => setEditName(e.target.value)}
-                            className="border border-gray-300 rounded px-2 py-1 w-full"
-                          />
-                        ) : (
-                          score.participantName
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {editingId === score.id ? (
-                          <input
-                            type="text"
-                            value={editScore}
-                            onChange={(e) => setEditScore(e.target.value)}
-                            className="border border-gray-300 rounded px-2 py-1 w-32"
-                          />
-                        ) : (
-                          score.score.toFixed(4)
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(score.submittedAt).toLocaleString("ja-JP")}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {editingId === score.id ? (
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={handleSave}
-                              className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                            >
-                              保存
-                            </button>
-                            <button
-                              onClick={handleCancel}
-                              className="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700"
-                            >
-                              キャンセル
-                            </button>
-                          </div>
-                        ) : (
+        {scores.length === 0 ? (
+          <div className="empty-state">まだスコアが登録されていません。</div>
+        ) : (
+          <div className="table-container">
+            <table className="leaderboard-table">
+              <thead className="table-head">
+                <tr>
+                  <th className="table-head-cell">順位</th>
+                  <th className="table-head-cell">参加者名</th>
+                  <th className="table-head-cell">スコア</th>
+                  <th className="table-head-cell">送信日時</th>
+                  <th className="table-head-cell">操作</th>
+                </tr>
+              </thead>
+              <tbody className="table-body">
+                {sortedScores.map((score, index) => (
+                  <tr key={score.id} className="table-row">
+                    <td className="table-cell table-cell-primary">
+                      {index + 1}
+                    </td>
+                    <td className="table-cell table-cell-secondary">
+                      {editingId === score.id ? (
+                        <input
+                          type="text"
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          className="form-input"
+                          style={{ minWidth: "150px" }}
+                        />
+                      ) : (
+                        score.participantName
+                      )}
+                    </td>
+                    <td className="table-cell table-cell-secondary">
+                      {editingId === score.id ? (
+                        <input
+                          type="text"
+                          value={editScore}
+                          onChange={(e) => setEditScore(e.target.value)}
+                          className="form-input"
+                          style={{ width: "120px" }}
+                        />
+                      ) : (
+                        score.score.toFixed(4)
+                      )}
+                    </td>
+                    <td className="table-cell table-cell-muted">
+                      {new Date(score.submittedAt).toLocaleString("ja-JP")}
+                    </td>
+                    <td className="table-cell">
+                      {editingId === score.id ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
                           <button
-                            onClick={() => handleEdit(score.id, score.participantName, score.score)}
-                            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                            onClick={handleSave}
+                            className="btn btn-success"
+                            style={{ padding: "0.25rem 0.75rem" }}
                           >
-                            編集
+                            保存
                           </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
+                          <button
+                            onClick={handleCancel}
+                            className="btn btn-secondary"
+                            style={{ padding: "0.25rem 0.75rem" }}
+                          >
+                            キャンセル
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() =>
+                            handleEdit(
+                              score.id,
+                              score.participantName,
+                              score.score
+                            )
+                          }
+                          className="btn btn-primary"
+                          style={{ padding: "0.25rem 0.75rem" }}
+                        >
+                          編集
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </AppLayout>
   );
 }
