@@ -29,7 +29,7 @@ s3_enable_lifecycle_rules = true
 
 # Amplify設定
 amplify_repository_url    = "https://github.com/YuriNakayama/ac-leaderboard"
-amplify_branch_name       = "develop"
+amplify_branch_name       = "main"
 amplify_app_root          = "frontend"
 amplify_enable_auto_build = true
 
