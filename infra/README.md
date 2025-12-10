@@ -36,11 +36,28 @@ infra/
 
 ### 1. AWS認証情報の設定
 
+#### 方法1: .envファイルを使用（推奨）
+
+```bash
+# .env.exampleをコピーして.envファイルを作成
+cp infra/.env.example infra/.env
+
+# .envファイルを編集してAWS認証情報を設定
+# AWS_ACCESS_KEY_ID=your-aws-access-key-id
+# AWS_SECRET_ACCESS_KEY=your-aws-secret-access-key
+# AWS_DEFAULT_REGION=ap-northeast-1
+
+# 環境変数を読み込む
+source infra/load-env.sh
+```
+
+#### 方法2: AWS CLIを使用
+
 ```bash
 aws configure
 ```
 
-または、環境変数を設定:
+#### 方法3: 環境変数を直接設定
 
 ```bash
 export AWS_ACCESS_KEY_ID="your-access-key"

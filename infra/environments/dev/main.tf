@@ -9,6 +9,23 @@ terraform {
   }
 }
 
+locals {
+  env_file = file("${path.root}/../../.env")
+  env_vars = {
+    for line in split("\n", local.env_file) :
+    split("=", line)[0] => join("=", slice(split("=", line), 1, length(split("=", line))))
+    if length(split("=", line)) >= 2 && !startswith(line, "#") && trimspace(line) != ""
+  }
+  github_access_token_raw = lookup(local.env_vars, "GITHUB_ACCESS_TOKEN", null)
+
+  # GITHUB_ACCESS_TOKENが見つからない、または空の場合はエラー
+  github_access_token = (
+    local.github_access_token_raw != null && trimspace(local.github_access_token_raw) != ""
+    ? local.github_access_token_raw
+    : tobool("Error: GITHUB_ACCESS_TOKEN not found or empty in infra/.env file. Please set a valid GitHub Personal Access Token.")
+  )
+}
+
 provider "aws" {
   region = var.aws_region
 
@@ -85,6 +102,9 @@ module "amplify" {
   competitions_table_arn = module.dynamodb.competitions_table_arn
   submissions_table_arn  = module.dynamodb.submissions_table_arn
   user_pool_arn          = module.cognito.user_pool_arn
+
+  # Secrets
+  access_token = local.github_access_token
 
   tags = var.common_tags
 }

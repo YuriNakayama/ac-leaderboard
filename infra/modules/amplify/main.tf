@@ -1,27 +1,30 @@
 # Amplify App
 resource "aws_amplify_app" "main" {
-  name = "${var.project_name}-${var.environment}"
-  # repository = var.repository_url  # GitHubとの連携は手動で設定
+  name         = "${var.project_name}-${var.environment}"
+  repository   = var.access_token != null ? var.repository_url : null
+  access_token = var.access_token
 
   # ビルド設定
   build_spec = var.build_spec != null ? var.build_spec : <<-EOT
     version: 1
-    frontend:
-      phases:
-        preBuild:
-          commands:
-            - npm ci
-        build:
-          commands:
-            - npm run build
-      artifacts:
-        baseDirectory: .next
-        files:
-          - '**/*'
-      cache:
-        paths:
-          - node_modules/**/*
-          - .next/cache/**/*
+    applications:
+      - appRoot: frontend
+        frontend:
+          phases:
+            preBuild:
+              commands:
+                - npm ci
+            build:
+              commands:
+                - npm run build
+          artifacts:
+            baseDirectory: .next
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - node_modules/**/*
+              - .next/cache/**/*
   EOT
 
   # 環境変数

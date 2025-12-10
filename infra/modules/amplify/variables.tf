@@ -13,6 +13,13 @@ variable "repository_url" {
   type        = string
 }
 
+variable "access_token" {
+  description = "GitHubアクセストークン"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
 variable "branch_name" {
   description = "デプロイするブランチ名"
   type        = string
