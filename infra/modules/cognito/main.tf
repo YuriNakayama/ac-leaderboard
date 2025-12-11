@@ -171,11 +171,90 @@ resource "aws_iam_role_policy" "authenticated" {
   })
 }
 
-# Attach Identity Pool Roles
+# IAM Role for Admin Users
+resource "aws_iam_role" "admin" {
+  name = "${var.project_name}-${var.environment}-cognito-admin-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = "cognito-identity.amazonaws.com"
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "cognito-identity.amazonaws.com:aud" = aws_cognito_identity_pool.main.id
+          }
+          "ForAnyValue:StringLike" = {
+            "cognito-identity.amazonaws.com:amr" = "authenticated"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = merge(
+    var.tags,
+    {
+      Name        = "${var.project_name}-${var.environment}-cognito-admin-role"
+      Environment = var.environment
+    }
+  )
+}
+
+# IAM Policy for Admin Users
+resource "aws_iam_role_policy" "admin" {
+  name = "${var.project_name}-${var.environment}-cognito-admin-policy"
+  role = aws_iam_role.admin.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "cognito-identity:GetCredentialsForIdentity",
+          "cognito-identity:GetId"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "cognito-idp:AdminListGroupsForUser",
+          "cognito-idp:AdminGetUser",
+          "cognito-idp:AdminEnableUser",
+          "cognito-idp:AdminDisableUser",
+          "cognito-idp:AdminDeleteUser",
+          "cognito-idp:ListUsers"
+        ]
+        Resource = aws_cognito_user_pool.main.arn
+      }
+    ]
+  })
+}
+
+# Attach Identity Pool Roles with Role Mapping
 resource "aws_cognito_identity_pool_roles_attachment" "main" {
   identity_pool_id = aws_cognito_identity_pool.main.id
 
   roles = {
     authenticated = aws_iam_role.authenticated.arn
+  }
+
+  role_mapping {
+    identity_provider         = "${aws_cognito_user_pool.main.endpoint}:${aws_cognito_user_pool_client.main.id}"
+    ambiguous_role_resolution = "AuthenticatedRole"
+    type                      = "Rules"
+
+    mapping_rule {
+      claim      = "cognito:groups"
+      match_type = "Contains"
+      role_arn   = aws_iam_role.admin.arn
+      value      = "admin"
+    }
   }
 }

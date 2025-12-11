@@ -1,6 +1,6 @@
 "use client";
 
-import { useScoreStore } from "@/lib/store";
+import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
@@ -20,12 +20,12 @@ export default function AppLayout({
   backButtonText = "スコアボードに戻る",
   backButtonHref = "/scoreboard",
 }: AppLayoutProps) {
-  const { currentUser, logout } = useScoreStore();
+  const { user: currentUser, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await signOut();
     router.push("/");
   };
 
@@ -40,10 +40,24 @@ export default function AppLayout({
                 <span className="text-sm text-muted">
                   ログイン中: {currentUser.username} ({currentUser.role === "admin" ? "管理者" : "参加者"})
                 </span>
-                {currentUser.role === "admin" && !pathname.includes("/admin") && (
-                  <Link href="/admin" className="btn btn-admin">
-                    管理者ページ
-                  </Link>
+                {currentUser.role === "admin" && (
+                  <>
+                    {pathname === "/admin" && (
+                      <Link href="/admin/users" className="btn btn-admin">
+                        ユーザー管理
+                      </Link>
+                    )}
+                    {pathname === "/admin/users" && (
+                      <Link href="/admin" className="btn btn-admin">
+                        スコア管理
+                      </Link>
+                    )}
+                    {!pathname.includes("/admin") && (
+                      <Link href="/admin" className="btn btn-admin">
+                        管理者ページ
+                      </Link>
+                    )}
+                  </>
                 )}
                 {!pathname.includes("/upload") && pathname !== "/admin" && (
                   <Link href="/upload" className="btn btn-success">
