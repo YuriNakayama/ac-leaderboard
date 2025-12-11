@@ -20,7 +20,7 @@ resource "aws_amplify_app" "main" {
                 - echo "NEXT_PUBLIC_COGNITO_USER_POOL_ID=$NEXT_PUBLIC_COGNITO_USER_POOL_ID" >> .env
                 - echo "NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID=$NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID" >> .env
                 - echo "NEXT_PUBLIC_COGNITO_IDENTITY_POOL_ID=$NEXT_PUBLIC_COGNITO_IDENTITY_POOL_ID" >> .env
-                - echo "NEXT_PUBLIC_COGNITO_REGION=$NEXT_PUBLIC_COGNITO_REGION" >> .env
+                - echo "NEXT_PUBLIC_AWS_REGION=$NEXT_PUBLIC_AWS_REGION" >> .env
                 - npm run build
           artifacts:
             baseDirectory: .next
