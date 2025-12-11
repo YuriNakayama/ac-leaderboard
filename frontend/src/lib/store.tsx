@@ -59,6 +59,7 @@ export function ScoreProvider({ children }: { children: ReactNode }): React.JSX.
       setCurrentUser({
         id: "1",
         username: "admin",
+        email: "admin@example.com",
         role: "admin",
       });
       return true;
@@ -66,6 +67,7 @@ export function ScoreProvider({ children }: { children: ReactNode }): React.JSX.
       setCurrentUser({
         id: "2",
         username: "participant",
+        email: "participant@example.com",
         role: "participant",
       });
       return true;
