@@ -61,9 +61,9 @@ export default function SignUpPage() {
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               確認コードを入力
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
-              {formData.email} に送信された確認コードを入力してください
-            </p>
+          <p className="mt-2 text-center text-sm text-gray-900">
+            {formData.email} に送信された確認コードを入力してください
+          </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={handleConfirm}>
             {error && (
@@ -110,7 +110,7 @@ export default function SignUpPage() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             新規登録
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-gray-900">
             すでにアカウントをお持ちの方は{" "}
             <Link
               href="/auth/signin"

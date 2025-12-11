@@ -20,7 +20,7 @@ export default function HomePage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">読み込み中...</p>
+          <p className="mt-4 text-gray-900">読み込み中...</p>
         </div>
       </div>
     );
@@ -33,7 +33,7 @@ export default function HomePage() {
           <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
             AC Leaderboard
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-900">
             機械学習コンペティションのリーダーボード
           </p>
         </div>
@@ -64,7 +64,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="text-center text-sm text-gray-500">
+        <div className="text-center text-sm text-gray-900">
           <p>アカウントを作成して競技に参加しましょう</p>
         </div>
       </div>

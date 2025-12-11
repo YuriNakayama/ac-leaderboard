@@ -2,8 +2,8 @@
 
 import { authConfirmResetPassword, authResetPassword } from "@/lib/auth";
 import type {
-    ConfirmResetPasswordParams,
-    ResetPasswordParams,
+  ConfirmResetPasswordParams,
+  ResetPasswordParams,
 } from "@/lib/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -76,9 +76,9 @@ export default function ResetPasswordPage() {
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               新しいパスワードを設定
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
-              {email} に送信された確認コードを入力してください
-            </p>
+          <p className="mt-2 text-center text-sm text-gray-900">
+            {email} に送信された確認コードを入力してください
+          </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={handleConfirm}>
             {error && (
@@ -148,7 +148,7 @@ export default function ResetPasswordPage() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             パスワードをリセット
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-gray-900">
             パスワードをお忘れの方は、メールアドレスを入力してください
           </p>
         </div>
