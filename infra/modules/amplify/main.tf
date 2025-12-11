@@ -89,7 +89,7 @@ resource "aws_amplify_branch" "main" {
       NEXT_PUBLIC_COGNITO_USER_POOL_ID        = var.user_pool_id
       NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID = var.user_pool_client_id
       NEXT_PUBLIC_COGNITO_IDENTITY_POOL_ID    = var.identity_pool_id
-      NEXT_PUBLIC_COGNITO_REGION              = var.aws_region
+      NEXT_PUBLIC_AWS_REGION                  = var.aws_region
     }
   )
 
