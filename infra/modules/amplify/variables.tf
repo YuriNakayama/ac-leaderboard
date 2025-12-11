@@ -110,6 +110,26 @@ variable "user_pool_arn" {
   type        = string
 }
 
+variable "user_pool_id" {
+  description = "Cognito User PoolのID"
+  type        = string
+}
+
+variable "user_pool_client_id" {
+  description = "Cognito User Pool ClientのID"
+  type        = string
+}
+
+variable "identity_pool_id" {
+  description = "Cognito Identity PoolのID"
+  type        = string
+}
+
+variable "aws_region" {
+  description = "AWSリージョン"
+  type        = string
+}
+
 variable "tags" {
   description = "リソースに付与する共通タグ"
   type        = map(string)

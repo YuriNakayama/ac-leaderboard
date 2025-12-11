@@ -17,6 +17,10 @@ resource "aws_amplify_app" "main" {
             build:
               commands:
                 - echo "NEXT_PUBLIC_APP_NAME=AI相談窓口" >> .env
+                - echo "NEXT_PUBLIC_COGNITO_USER_POOL_ID=$NEXT_PUBLIC_COGNITO_USER_POOL_ID" >> .env
+                - echo "NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID=$NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID" >> .env
+                - echo "NEXT_PUBLIC_COGNITO_IDENTITY_POOL_ID=$NEXT_PUBLIC_COGNITO_IDENTITY_POOL_ID" >> .env
+                - echo "NEXT_PUBLIC_COGNITO_REGION=$NEXT_PUBLIC_COGNITO_REGION" >> .env
                 - npm run build
           artifacts:
             baseDirectory: .next
@@ -79,7 +83,15 @@ resource "aws_amplify_branch" "main" {
 
   enable_auto_build = var.enable_auto_build
 
-  environment_variables = var.branch_environment_variables
+  environment_variables = merge(
+    var.branch_environment_variables,
+    {
+      NEXT_PUBLIC_COGNITO_USER_POOL_ID        = var.user_pool_id
+      NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID = var.user_pool_client_id
+      NEXT_PUBLIC_COGNITO_IDENTITY_POOL_ID    = var.identity_pool_id
+      NEXT_PUBLIC_COGNITO_REGION              = var.aws_region
+    }
+  )
 
   tags = merge(
     var.tags,

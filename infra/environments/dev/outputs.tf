@@ -67,3 +67,14 @@ output "aws_region" {
   description = "デプロイされたAWSリージョン"
   value       = var.aws_region
 }
+
+# フロントエンド用環境変数（ローカル開発用）
+output "frontend_env_variables" {
+  description = "フロントエンドのローカル開発で使用する環境変数"
+  value = {
+    NEXT_PUBLIC_COGNITO_USER_POOL_ID        = module.cognito.user_pool_id
+    NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID = module.cognito.user_pool_client_id
+    NEXT_PUBLIC_COGNITO_IDENTITY_POOL_ID    = module.cognito.identity_pool_id
+    NEXT_PUBLIC_AWS_REGION                  = var.aws_region
+  }
+}

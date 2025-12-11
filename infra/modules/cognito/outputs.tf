@@ -32,3 +32,8 @@ output "user_group_name" {
   description = "一般ユーザーグループ名"
   value       = aws_cognito_user_group.user.name
 }
+
+output "authenticated_role_arn" {
+  description = "認証済みユーザー用IAMロールのARN"
+  value       = aws_iam_role.authenticated.arn
+}

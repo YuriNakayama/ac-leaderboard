@@ -103,6 +103,12 @@ module "amplify" {
   submissions_table_arn  = module.dynamodb.submissions_table_arn
   user_pool_arn          = module.cognito.user_pool_arn
 
+  # Cognito設定
+  user_pool_id        = module.cognito.user_pool_id
+  user_pool_client_id = module.cognito.user_pool_client_id
+  identity_pool_id    = module.cognito.identity_pool_id
+  aws_region          = var.aws_region
+
   # Secrets
   access_token = local.github_access_token
 

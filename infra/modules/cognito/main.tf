@@ -116,3 +116,66 @@ resource "aws_cognito_identity_pool" "main" {
     }
   )
 }
+
+# IAM Role for Authenticated Users
+resource "aws_iam_role" "authenticated" {
+  name = "${var.project_name}-${var.environment}-cognito-authenticated-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = "cognito-identity.amazonaws.com"
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "cognito-identity.amazonaws.com:aud" = aws_cognito_identity_pool.main.id
+          }
+          "ForAnyValue:StringLike" = {
+            "cognito-identity.amazonaws.com:amr" = "authenticated"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = merge(
+    var.tags,
+    {
+      Name        = "${var.project_name}-${var.environment}-cognito-authenticated-role"
+      Environment = var.environment
+    }
+  )
+}
+
+# IAM Policy for Authenticated Users
+resource "aws_iam_role_policy" "authenticated" {
+  name = "${var.project_name}-${var.environment}-cognito-authenticated-policy"
+  role = aws_iam_role.authenticated.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "cognito-identity:GetCredentialsForIdentity",
+          "cognito-identity:GetId"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Attach Identity Pool Roles
+resource "aws_cognito_identity_pool_roles_attachment" "main" {
+  identity_pool_id = aws_cognito_identity_pool.main.id
+
+  roles = {
+    authenticated = aws_iam_role.authenticated.arn
+  }
+}

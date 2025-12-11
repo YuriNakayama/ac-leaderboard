@@ -49,3 +49,23 @@ Kaggleのリーダーボードのように、リアルタイムでスコアが�
 <reference>
 https://docs.cloud.google.com/docs/terraform/best-practices/general-style-structure
 </reference>
+
+## 認証実装
+
+<instruction>
+Kaggleのリーダーボードのように、リアルタイムでスコアが更新される仕組みの認証をAWS Cognitoを使用して実装してください。以下の要件を満たすようにしてください。
+</instruction>
+
+<requirements>
+- ユーザーはサインアップとログインができる
+- ユーザーはパスワードリセットができる
+- 管理者はユーザーのアカウントを無効化または削除できる
+- ユーザーはCognito User Poolを使用して認証される
+- ユーザーはCognito Identity Poolを使用してAWSリソースにアクセスできる
+</requirements>
+
+<development-rule>
+- 実装の増加量が小さくなるよう、大規模なクラスの実装はしない
+- 後方互換性への配慮は不要。不要になったコードは削除
+- 小さすぎるクラスやメソッドは実装しない
+</development-rule>
